@@ -1,0 +1,67 @@
+--------------qos queue-profile--------------------------------
+
+6400(config)# qos queue-profile q4
+6400(config-queue)# map queue 0 local-priority 0
+6400(config-queue)# map queue 0 local-priority 1
+6400(config-queue)# map queue 1 local-priority 2
+6400(config-queue)# map queue 1 local-priority 3
+6400(config-queue)# map queue 2 local-priority 4
+6400(config-queue)# map queue 2 local-priority 5
+6400(config-queue)# map queue 3 local-priority 6
+6400(config-queue)# map queue 3 local-priority 7
+
+
+6400(config-queue)# show qos queue-profile
+
+profile_status profile_name
+-------------- ------------
+applied        factory-default
+complete       q4                          << notice that it says complete
+incomplete     testqueue
+
+
+
+6400(config-queue)# show qos queue-profile q4
+queue_num local_priorities name
+--------- ---------------- ----
+0         0,1
+1         2,3
+2         4,5
+3         6,7
+--------------------------------------------------------------
+
+----------------qos schedule-profile config ------------
+
+6400(config)#  show qos schedule-profile profile4
+queue_num algorithm     weight max-bandwidth_kbps
+--------- ------------- ------ ------------------
+0         dwrr          1
+1         dwrr          1
+2         dwrr          1
+3         strict               100000
+
+
+6400(config)# show qos schedule-profile
+profile_status profile_name
+-------------- ------------
+applied        factory-default
+complete       profile4                   << complete
+incomplete     qosprofile
+complete       strict
+
+
+-----------------------------------------------------------------
+
+After applying the qos queue-profile/schedule-profile
+
+6400(config)#apply qos queue-profile q4 schedule-profile profile4
+
+
+6400(config)#  show qos queue-profile
+profile_status profile_name
+-------------- ------------
+complete       factory-default
+applied        q4                  <<applied
+incomplete     testqueue
+
+-----------------------------------------------------------------
