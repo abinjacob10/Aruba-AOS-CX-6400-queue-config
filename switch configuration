@@ -1,3 +1,5 @@
+An Example:
+
 --------------qos queue-profile--------------------------------
 
 6400(config)# qos queue-profile q4
